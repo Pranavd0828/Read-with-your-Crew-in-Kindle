@@ -5,49 +5,87 @@ const StreakContext = createContext();
 export const useStreak = () => useContext(StreakContext);
 
 export const StreakProvider = ({ children }) => {
-  const [streak, setStreak] = useState(12); // Mock streak
-  const [userProgress, setUserProgress] = useState(0); // Pages read today
-  const [groupMembers, setGroupMembers] = useState([
-    { id: 1, name: 'You', pagesRead: 0, status: 'pending' },
-    { id: 2, name: 'Alice', pagesRead: 3, status: 'done' },
-    { id: 3, name: 'Bob', pagesRead: 1, status: 'in_progress' },
-  ]);
+    const [streak, setStreak] = useState(12); // Mock streak
+    const [userProgress, setUserProgress] = useState(0); // Pages read today
 
-  const GOAL = 3;
+    // Privacy State
+    const [isPrivate, setIsPrivate] = useState(false);
 
-  // Load from local storage or init
-  useEffect(() => {
-    const savedProgress = localStorage.getItem('todayProgress');
-    if (savedProgress) {
-      setUserProgress(parseInt(savedProgress, 10));
-    }
-  }, []);
+    const [groupMembers, setGroupMembers] = useState([
+        { id: 1, name: 'You', pagesRead: 0, status: 'pending', currentBook: 'The Great Gatsby', isPrivate: false },
+        { id: 2, name: 'Alice', pagesRead: 3, status: 'done', currentBook: 'Atomic Habits', isPrivate: true },
+        { id: 3, name: 'Bob', pagesRead: 1, status: 'in_progress', currentBook: 'Sapiens', isPrivate: false },
+    ]);
 
-  // Update logic when page is turned
-  const logPageRead = () => {
-    setUserProgress((prev) => {
-      const newVal = prev + 1;
-      localStorage.setItem('todayProgress', newVal);
-      return newVal;
-    });
-  };
+    const GOAL = 3;
 
-  // derived state
-  const isGoalMet = userProgress >= GOAL;
-  
-  // Sync user status in groupMembers
-  useEffect(() => {
-    setGroupMembers((prev) => 
-      prev.map(m => m.name === 'You' 
-        ? { ...m, pagesRead: userProgress, status: userProgress >= GOAL ? 'done' : userProgress > 0 ? 'in_progress' : 'pending' } 
-        : m
-      )
+    // Load from local storage or init
+    useEffect(() => {
+        const savedProgress = localStorage.getItem('todayProgress');
+        if (savedProgress) {
+            setUserProgress(parseInt(savedProgress, 10));
+        }
+    }, []);
+
+    // Update logic when page is turned
+    const logPageRead = () => {
+        setUserProgress((prev) => {
+            const newVal = prev + 1;
+            localStorage.setItem('todayProgress', newVal);
+            return newVal;
+        });
+    };
+
+    const togglePrivacy = () => {
+        setIsPrivate(prev => !prev);
+    };
+
+    const inviteFriend = (name) => {
+        const newId = groupMembers.length + 1;
+        setGroupMembers(prev => [
+            ...prev,
+            {
+                id: newId,
+                name: name,
+                pagesRead: 0,
+                status: 'pending',
+                currentBook: 'Unknown Book',
+                isPrivate: false
+            }
+        ]);
+    };
+
+    // derived state
+    const isGoalMet = userProgress >= GOAL;
+
+    // Sync user status in groupMembers
+    useEffect(() => {
+        setGroupMembers((prev) =>
+            prev.map(m => m.name === 'You'
+                ? {
+                    ...m,
+                    pagesRead: userProgress,
+                    status: userProgress >= GOAL ? 'done' : userProgress > 0 ? 'in_progress' : 'pending',
+                    isPrivate: isPrivate
+                }
+                : m
+            )
+        );
+    }, [userProgress, isPrivate]);
+
+    return (
+        <StreakContext.Provider value={{
+            streak,
+            userProgress,
+            groupMembers,
+            logPageRead,
+            isGoalMet,
+            GOAL,
+            isPrivate,
+            togglePrivacy,
+            inviteFriend
+        }}>
+            {children}
+        </StreakContext.Provider>
     );
-  }, [userProgress]);
-
-  return (
-    <StreakContext.Provider value={{ streak, userProgress, groupMembers, logPageRead, isGoalMet, GOAL }}>
-      {children}
-    </StreakContext.Provider>
-  );
 };

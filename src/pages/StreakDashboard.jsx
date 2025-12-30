@@ -1,40 +1,114 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStreak } from '../context/StreakContext';
-import { CheckCircle, Circle, Flame } from 'lucide-react';
+import { CheckCircle, Circle, Flame, Bell, X, Lock, Users, Plus } from 'lucide-react';
+
+const NUDGES = [
+    "Even the Roman Empire fell, don't let our streak follow.",
+    "3 pages. That's less than a menu.",
+    "Your streak is screaming for help.",
+    "Reading makes you smarter. Just saying.",
+    "The book isn't going to read itself (unfortunately).",
+    "Don't be the reason we start from zero!",
+    "I bet you read more text messages than this today."
+];
 
 const StreakDashboard = () => {
-    const { streak, groupMembers, userProgress, GOAL } = useStreak();
+    const { streak, groupMembers, userProgress, GOAL, isPrivate, togglePrivacy, inviteFriend } = useStreak();
+    const [nudgeMessage, setNudgeMessage] = useState(null);
+    const [showInviteModal, setShowInviteModal] = useState(false);
+    const [inviteName, setInviteName] = useState("");
+    const [inviteEmail, setInviteEmail] = useState("");
+    const [emailError, setEmailError] = useState("");
+
+    const handleNudge = (name) => {
+        const randomMsg = NUDGES[Math.floor(Math.random() * NUDGES.length)];
+        setNudgeMessage(`Nudged ${name}: "${randomMsg}"`);
+    };
+
+    const handleInvite = (e) => {
+        e.preventDefault();
+        setEmailError("");
+
+        // Validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!inviteName.trim()) {
+            return;
+        }
+        if (!emailRegex.test(inviteEmail)) {
+            setEmailError("Please enter a valid email address.");
+            return;
+        }
+
+        inviteFriend(inviteName.trim());
+        setInviteName("");
+        setInviteEmail("");
+        setShowInviteModal(false);
+        setNudgeMessage(`Invited ${inviteName}!`);
+    };
+
+    // Auto-dismiss toast after 3 seconds
+    useEffect(() => {
+        if (nudgeMessage) {
+            const timer = setTimeout(() => {
+                setNudgeMessage(null);
+            }, 4000);
+            return () => clearTimeout(timer);
+        }
+    }, [nudgeMessage]);
 
     return (
-        <div>
-            <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>Your Crew</h1>
+        <div style={{ position: 'relative', minHeight: '80vh' }}>
+            {/* Header with Privacy Toggle */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h1 style={{ fontSize: '24px', fontWeight: 'bold' }}>Your Crew</h1>
+                <button
+                    onClick={togglePrivacy}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        background: isPrivate ? '#000' : '#f0f0f0',
+                        color: isPrivate ? '#fff' : '#333',
+                        border: 'none',
+                        padding: '6px 12px',
+                        borderRadius: '20px',
+                        fontSize: '12px',
+                        fontWeight: '600'
+                    }}
+                >
+                    <Lock size={12} />
+                    {isPrivate ? 'Reading Private' : 'Public'}
+                </button>
+            </div>
 
-            {/* Main Streak Card */}
+            {/* Main Streak Card - New Badge Style */}
             <div style={{
-                background: '#fff',
-                padding: '20px',
-                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #1A1A1A 0%, #000 100%)',
+                padding: '24px',
+                borderRadius: '16px',
                 marginBottom: '24px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '16px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+                justifyContent: 'space-between',
+                color: '#fff',
+                boxShadow: '0 8px 20px rgba(0,0,0,0.15)'
             }}>
+                <div>
+                    <div style={{ fontSize: '14px', opacity: 0.8, marginBottom: '4px' }}>Current Streak</div>
+                    <div style={{ fontSize: '48px', fontWeight: '800', lineHeight: 1 }}>{streak}</div>
+                    <div style={{ fontSize: '14px', opacity: 0.6 }}>Days active</div>
+                </div>
                 <div style={{
-                    background: '#FFF0E6',
-                    width: '60px',
-                    height: '60px',
+                    width: '70px',
+                    height: '70px',
                     borderRadius: '50%',
+                    background: 'rgba(255, 152, 0, 0.2)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#FF4500'
+                    border: '2px solid rgba(255, 152, 0, 0.5)'
                 }}>
-                    <Flame size={32} fill="#FF4500" />
-                </div>
-                <div>
-                    <div style={{ fontSize: '32px', fontWeight: '800' }}>{streak}</div>
-                    <div style={{ color: '#666', fontSize: '14px' }}>Day Streak</div>
+                    <Flame size={40} fill="#FF9800" stroke="#FF9800" />
                 </div>
             </div>
 
@@ -69,6 +143,14 @@ const StreakDashboard = () => {
                             <div>
                                 <div style={{ fontWeight: '600' }}>{member.name}</div>
                                 <div style={{ fontSize: '12px', color: '#666' }}>
+                                    {member.isPrivate ?
+                                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontStyle: 'italic' }}>
+                                            <Lock size={10} /> Private Reading
+                                        </span>
+                                        : member.currentBook
+                                    }
+                                </div>
+                                <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>
                                     {member.pagesRead} / {GOAL} pages
                                 </div>
                             </div>
@@ -77,17 +159,38 @@ const StreakDashboard = () => {
                         <div>
                             {member.status === 'done' ? (
                                 <CheckCircle color="#4CAF50" fill="#E8F5E9" size={24} />
-                            ) : member.status === 'in_progress' ? (
-                                // Simple ring progress can go here, using a circle outline for now
-                                <div style={{
-                                    width: '24px', height: '24px',
-                                    borderRadius: '50%',
-                                    border: '3px solid #FF9800',
-                                    borderTopColor: 'transparent',
-                                    transform: 'rotate(45deg)'
-                                }} />
                             ) : (
-                                <Circle color="#ddd" size={24} />
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    {member.name !== 'You' && (
+                                        <button
+                                            onClick={() => handleNudge(member.name)}
+                                            style={{
+                                                background: '#f0f0f0',
+                                                border: '1px solid #ddd',
+                                                borderRadius: '20px',
+                                                padding: '4px 12px',
+                                                fontSize: '12px',
+                                                fontWeight: '600',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '4px'
+                                            }}
+                                        >
+                                            <Bell size={12} /> Nudge
+                                        </button>
+                                    )}
+                                    {member.status === 'in_progress' ? (
+                                        <div style={{
+                                            width: '24px', height: '24px',
+                                            borderRadius: '50%',
+                                            border: '3px solid #FF9800',
+                                            borderTopColor: 'transparent',
+                                            transform: 'rotate(45deg)'
+                                        }} />
+                                    ) : (
+                                        <Circle color="#ddd" size={24} />
+                                    )}
+                                </div>
                             )}
                         </div>
                     </div>
@@ -95,18 +198,132 @@ const StreakDashboard = () => {
             </div>
 
             <div style={{ marginTop: '24px', textAlign: 'center' }}>
-                <button style={{
-                    width: '100%',
-                    padding: '16px',
-                    background: '#000',
-                    color: '#fff',
-                    borderRadius: '8px',
-                    fontWeight: 'bold',
-                    fontSize: '16px'
-                }}>
-                    Invite Friend
+                <button
+                    onClick={() => setShowInviteModal(true)}
+                    style={{
+                        width: '100%',
+                        padding: '16px',
+                        background: '#000',
+                        color: '#fff',
+                        borderRadius: '8px',
+                        fontWeight: 'bold',
+                        fontSize: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px'
+                    }}>
+                    <Users size={18} /> Invite Friend
                 </button>
             </div>
+
+            {/* Invite Modal */}
+            {showInviteModal && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0, left: 0, right: 0, bottom: 0,
+                    background: 'rgba(0,0,0,0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 2000
+                }}>
+                    <div style={{
+                        background: '#fff',
+                        padding: '24px',
+                        borderRadius: '12px',
+                        width: '90%',
+                        maxWidth: '320px',
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+                    }}>
+                        <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px' }}>Invite to Crew</h3>
+                        <form onSubmit={handleInvite}>
+                            <input
+                                type="text"
+                                placeholder="Friend's Name"
+                                value={inviteName}
+                                onChange={(e) => setInviteName(e.target.value)}
+                                style={{
+                                    width: '100%',
+                                    padding: '12px',
+                                    borderRadius: '8px',
+                                    border: '1px solid #ddd',
+                                    marginBottom: '12px',
+                                    fontSize: '16px'
+                                }}
+                                autoFocus
+                            />
+                            <input
+                                type="email"
+                                placeholder="Email Address"
+                                value={inviteEmail}
+                                onChange={(e) => {
+                                    setInviteEmail(e.target.value);
+                                    setEmailError("");
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: '12px',
+                                    borderRadius: '8px',
+                                    border: `1px solid ${emailError ? 'red' : '#ddd'}`,
+                                    marginBottom: '8px',
+                                    fontSize: '16px'
+                                }}
+                            />
+                            {emailError && <div style={{ color: 'red', fontSize: '12px', marginBottom: '12px' }}>{emailError}</div>}
+
+                            <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
+                                <button
+                                    type="button"
+                                    onClick={() => setShowInviteModal(false)}
+                                    style={{ flex: 1, padding: '12px', borderRadius: '8px', border: 'none', background: '#f0f0f0', fontWeight: '600' }}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    style={{ flex: 1, padding: '12px', borderRadius: '8px', border: 'none', background: '#000', color: '#fff', fontWeight: '600' }}
+                                >
+                                    Invite
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Toast Notification */}
+            {nudgeMessage && (
+                <div style={{
+                    position: 'fixed',
+                    bottom: '80px', // above nav
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: '#333',
+                    color: '#fff',
+                    padding: '12px 20px',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                    zIndex: 1000,
+                    width: '90%',
+                    maxWidth: '400px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    animation: 'fadeIn 0.3s ease-out'
+                }}>
+                    <span style={{ fontSize: '14px', lineHeight: '1.4' }}>{nudgeMessage}</span>
+                    <button onClick={() => setNudgeMessage(null)} style={{ marginLeft: '10px', color: '#aaa' }}>
+                        <X size={16} />
+                    </button>
+                </div>
+            )}
+            <style>{`
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translate(-50%, 10px); }
+                    to { opacity: 1; transform: translate(-50%, 0); }
+                }
+            `}</style>
         </div>
     );
 };
