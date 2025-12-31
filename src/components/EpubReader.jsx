@@ -42,6 +42,23 @@ const EpubReader = ({ url, onPageChange, initialLocation, theme = 'light', fontS
         }
     }, [theme, fontSize, url]); // Re-run if these change
 
+    // Keyboard Navigation
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            const rendition = renditionRef.current;
+            if (!rendition) return;
+
+            if (e.key === 'ArrowRight') {
+                rendition.next();
+            } else if (e.key === 'ArrowLeft') {
+                rendition.prev();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
     return (
         <div style={{ height: '100%', position: 'relative' }}>
             <ReactReader
