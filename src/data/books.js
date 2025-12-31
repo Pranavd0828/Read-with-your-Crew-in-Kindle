@@ -11,13 +11,13 @@ export const BOOKS = [
         title: 'The Rise and Fall of The Roman',
         author: 'Klein, Michael',
         cover: '/covers/roman-cover.jpg',
-        file: '/books/The Rise and Fall of The Roman - Klein, Michael.mobi',
+        file: '/books/alice.epub',
     },
     {
         id: 'zero',
         title: 'Zero to One',
         author: 'Peter Thiel',
         cover: 'https://images-na.ssl-images-amazon.com/images/I/71uAI28kJuL.jpg',
-        file: '/books/Zero to One - Peter Thiel.mobi',
+        file: '/books/alice.epub',
     },
 ];
