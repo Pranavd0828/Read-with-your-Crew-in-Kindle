@@ -119,7 +119,15 @@ const Reader = () => {
     }, [book]);
 
     const handleNextPage = () => {
+        const timeSpent = Date.now() - pageStartTime.current;
+        if (timeSpent < 2000) {
+            setShowToast(`Read for ${(2 - timeSpent / 1000).toFixed(1)}s more to count this page!`);
+            setTimeout(() => setShowToast(null), 2000);
+            return;
+        }
+
         if (currentPage < content.length - 1) {
+            console.log(`Turning page. Current: ${currentPage}. Logging read.`);
             setCurrentPage(prev => prev + 1);
             logPageRead();
             window.scrollTo(0, 0);
