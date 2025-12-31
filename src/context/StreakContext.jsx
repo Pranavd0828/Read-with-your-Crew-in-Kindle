@@ -28,13 +28,25 @@ export const StreakProvider = ({ children }) => {
     }, []);
 
     // Update logic when page is turned
+    const [showCelebration, setShowCelebration] = useState(false);
+
+    // Update logic when page is turned
     const logPageRead = () => {
         setUserProgress((prev) => {
             const newVal = prev + 1;
             localStorage.setItem('todayProgress', newVal);
+
+            // Check if goal met just now
+            if (newVal === GOAL) {
+                setStreak(s => s + 1);
+                setShowCelebration(true);
+            }
+
             return newVal;
         });
     };
+
+    const closeCelebration = () => setShowCelebration(false);
 
     const togglePrivacy = () => {
         setIsPrivate(prev => !prev);
@@ -53,6 +65,12 @@ export const StreakProvider = ({ children }) => {
                 isPrivate: false
             }
         ]);
+    };
+
+    const resetProgress = () => {
+        setUserProgress(0);
+        setShowCelebration(false);
+        localStorage.setItem('todayProgress', '0');
     };
 
     // derived state
@@ -83,7 +101,10 @@ export const StreakProvider = ({ children }) => {
             GOAL,
             isPrivate,
             togglePrivacy,
-            inviteFriend
+            inviteFriend,
+            showCelebration,
+            closeCelebration,
+            resetProgress
         }}>
             {children}
         </StreakContext.Provider>

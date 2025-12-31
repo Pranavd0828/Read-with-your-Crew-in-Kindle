@@ -13,7 +13,7 @@ const NUDGES = [
 ];
 
 const StreakDashboard = () => {
-    const { streak, groupMembers, userProgress, GOAL, isPrivate, togglePrivacy, inviteFriend } = useStreak();
+    const { streak, userProgress, groupMembers, isGoalMet, GOAL, inviteFriend, isPrivate, togglePrivacy, resetProgress } = useStreak();
     const [nudgeMessage, setNudgeMessage] = useState(null);
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [inviteName, setInviteName] = useState("");
@@ -226,29 +226,6 @@ const StreakDashboard = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    zIndex: 2000
-                }}>
-                    <div style={{
-                        background: '#fff',
-                        padding: '24px',
-                        borderRadius: '12px',
-                        width: '90%',
-                        maxWidth: '320px',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-                    }}>
-                        <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px' }}>Invite to Crew</h3>
-                        <form onSubmit={handleInvite}>
-                            <input
-                                type="text"
-                                placeholder="Friend's Name"
-                                value={inviteName}
-                                onChange={(e) => setInviteName(e.target.value)}
-                                style={{
-                                    width: '100%',
-                                    padding: '12px',
-                                    borderRadius: '8px',
-                                    border: '1px solid #ddd',
-                                    marginBottom: '12px',
                                     fontSize: '16px'
                                 }}
                                 autoFocus
@@ -272,59 +249,61 @@ const StreakDashboard = () => {
                             />
                             {emailError && <div style={{ color: 'red', fontSize: '12px', marginBottom: '12px' }}>{emailError}</div>}
 
-                            <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
-                                <button
-                                    type="button"
-                                    onClick={() => setShowInviteModal(false)}
-                                    style={{ flex: 1, padding: '12px', borderRadius: '8px', border: 'none', background: '#f0f0f0', fontWeight: '600' }}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    style={{ flex: 1, padding: '12px', borderRadius: '8px', border: 'none', background: '#000', color: '#fff', fontWeight: '600' }}
-                                >
-                                    Invite
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
+                <button
+                    type="button"
+                    onClick={() => setShowInviteModal(false)}
+                    style={{ flex: 1, padding: '12px', borderRadius: '8px', border: 'none', background: '#f0f0f0', fontWeight: '600' }}
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    style={{ flex: 1, padding: '12px', borderRadius: '8px', border: 'none', background: '#000', color: '#fff', fontWeight: '600' }}
+                >
+                    Invite
+                </button>
+            </div>
+        </form>
+                    </div >
+                </div >
             )}
 
-            {/* Toast Notification */}
-            {nudgeMessage && (
-                <div style={{
-                    position: 'fixed',
-                    bottom: '80px', // above nav
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    background: '#333',
-                    color: '#fff',
-                    padding: '12px 20px',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-                    zIndex: 1000,
-                    width: '90%',
-                    maxWidth: '400px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    animation: 'fadeIn 0.3s ease-out'
-                }}>
-                    <span style={{ fontSize: '14px', lineHeight: '1.4' }}>{nudgeMessage}</span>
-                    <button onClick={() => setNudgeMessage(null)} style={{ marginLeft: '10px', color: '#aaa' }}>
-                        <X size={16} />
-                    </button>
-                </div>
-            )}
-            <style>{`
+{/* Toast Notification */ }
+{
+    nudgeMessage && (
+        <div style={{
+            position: 'fixed',
+            bottom: '80px', // above nav
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: '#333',
+            color: '#fff',
+            padding: '12px 20px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+            zIndex: 1000,
+            width: '90%',
+            maxWidth: '400px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            animation: 'fadeIn 0.3s ease-out'
+        }}>
+            <span style={{ fontSize: '14px', lineHeight: '1.4' }}>{nudgeMessage}</span>
+            <button onClick={() => setNudgeMessage(null)} style={{ marginLeft: '10px', color: '#aaa' }}>
+                <X size={16} />
+            </button>
+        </div>
+    )
+}
+<style>{`
                 @keyframes fadeIn {
                     from { opacity: 0; transform: translate(-50%, 10px); }
                     to { opacity: 1; transform: translate(-50%, 0); }
                 }
             `}</style>
-        </div>
+        </div >
     );
 };
 
