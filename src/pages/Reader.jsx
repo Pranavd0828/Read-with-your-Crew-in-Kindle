@@ -124,13 +124,30 @@ const Reader = () => {
 
             {/* Content: EPUB READER */}
             <div style={{ flex: 1, position: 'relative' }}>
-                <EpubReader
-                    url={book.file}
-                    initialLocation={location}
-                    onPageChange={handlePageChange}
-                    theme={theme}
-                    fontSize={fontSize}
-                />
+                {book.file.endsWith('.epub') ? (
+                    <EpubReader
+                        url={book.file}
+                        initialLocation={location}
+                        onPageChange={handlePageChange}
+                        theme={theme}
+                        fontSize={fontSize}
+                    />
+                ) : (
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: '100%',
+                        padding: '40px',
+                        textAlign: 'center',
+                        color: theme === 'dark' ? '#ccc' : '#666'
+                    }}>
+                        <h3 style={{ marginBottom: '16px' }}>Legacy Format</h3>
+                        <p>This book uses an older file format (.mobi) which is not supported by the new Reader Engine.</p>
+                        <p style={{ marginTop: '16px', fontWeight: 'bold' }}>Please try "Moby-Dick" or "Alice in Wonderland" to test the new reading experience.</p>
+                    </div>
+                )}
             </div>
 
             {/* Progress Footer */}
