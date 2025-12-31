@@ -69,6 +69,7 @@ export const StreakProvider = ({ children }) => {
 
     const resetProgress = () => {
         setUserProgress(0);
+        setStreak(11); // Reset to 11 so it goes to 12 on completion
         setShowCelebration(false);
         localStorage.setItem('todayProgress', '0');
     };

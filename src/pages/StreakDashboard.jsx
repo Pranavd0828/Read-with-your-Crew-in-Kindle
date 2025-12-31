@@ -150,8 +150,8 @@ const StreakDashboard = () => {
                                         : member.currentBook
                                     }
                                 </div>
-                                <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>
-                                    {member.pagesRead} / {GOAL} pages
+                                <div style={{ fontSize: '12px', color: '#666' }}>
+                                    {Math.min(member.pagesRead, GOAL)} / {GOAL} pages
                                 </div>
                             </div>
                         </div>
