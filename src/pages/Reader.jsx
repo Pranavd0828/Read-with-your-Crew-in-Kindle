@@ -235,7 +235,7 @@ const Reader = () => {
             }}>
                 <span>Page {currentPage + 1} of {content.length}</span>
                 <span>
-                    {Math.min(userProgress, GOAL)} / {GOAL} pages today {userProgress >= GOAL ? '(Done!)' : ''}
+                    Daily Goal: {Math.min(userProgress, GOAL)} / {GOAL} {userProgress >= GOAL ? '(Done!)' : ''}
                 </span>
             </div>
         </div>
