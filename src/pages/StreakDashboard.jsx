@@ -217,6 +217,21 @@ const StreakDashboard = () => {
                 </button>
             </div>
 
+            {/* DEMO RESET */}
+            <div style={{ marginTop: '40px', display: 'flex', justifyContent: 'center' }}>
+                <button
+                    onClick={() => {
+                        resetProgress();
+                        alert("Progress reset to 0. Streak set to 11. Go read 3 pages!");
+                    }}
+                    style={{ background: 'none', border: '1px dashed #999', padding: '8px 16px', borderRadius: '8px', color: '#666', fontSize: '12px', cursor: 'pointer' }}
+                >
+                    Reset Progress (Demo)
+                </button>
+            </div>
+
+            <div style={{ height: '80px' }}></div> {/* Spacer for bottom nav */}
+
             {/* Invite Modal */}
             {showInviteModal && (
                 <div style={{
