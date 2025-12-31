@@ -14,7 +14,7 @@ Digital reading is mature, but social reading is stagnant. People share book rec
 
 ## How It Works
 We are building a lightweight web prototype that mimics the familiar Kindle interface to reduce friction.
-1.  **The Library**: Users see their current books in a clean and distraction-free grid.
-2.  **The Reader**: A simulated e-reader experience allows users to read real text. It verifies that they are actually reading by measuring the time spent on each page.
+1.  **The Library**: Users see their current books in a clean and distraction-free grid. The library supports both curated classics and personal file uploads.
+2.  **The Reader**: An advanced e-reader experience allows users to read real EPUB books with custom themes. It verifies engagement by measuring time spent on each page.
 3.  **The Crew**: A dashboard shows who has read today and who needs a nudge. Privacy controls allow users to keep their book titles hidden while still sharing their progress.
 4.  **The Celebration**: Completing the daily goal triggers a rewarding visual celebration to reinforce the habit loop.

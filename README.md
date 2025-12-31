@@ -10,7 +10,9 @@ This project is a social reading prototype that brings the power of accountabili
 *   **Navigation**: Easy access to your current reads.
 
 ### The Reader
-*   **Authentic Experience**: Simulates a real e-reader interface for a focused reading environment.
+*   **Authentic Experience**: Uses an advanced EPUB engine for a high-fidelity reading experience. It supports custom themes (Light, Dark, Sepia) and adjustable font sizes.
+*   **Legacy Support**: Preserves access to older book formats via a specialized text preview mode.
+*   **Book Upload**: Allows users to import their own `.epub` or `.mobi` files directly from their device.
 *   **Proof of Work**: The app intelligently validates your reading. You must spend a minimum of 2 seconds on a page before it counts as read.
 *   **Daily Goals**: Tracks your progress towards a 3-page daily target.
 *   **Celebration**: A full-screen animation rewards you with a witty quote when you hit your daily goal.
@@ -20,7 +22,7 @@ This project is a social reading prototype that brings the power of accountabili
 *   **Member Status**: See who has finished their reading for the day and who is still working on it.
 *   **Nudges**: Send friendly reminders to crew members who are falling behind.
 *   **Privacy Controls**: Toggle privacy mode to share your progress without revealing the specific book title you are reading.
-*   **Invitations**: invite new friends to your crew using the built-in modal.
+*   **Invitations**: Invite new friends to your crew using the built-in modal.
 
 ### Demo Utilities
 *   **Reset Progress**: A dedicated button in the dashboard allows you to reset your daily progress. This is useful for demonstrating the streak celebration flow from start to finish.
