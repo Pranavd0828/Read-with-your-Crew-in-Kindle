@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Settings, ArrowRight, X, Type, Sun, Moon, Coffee } from 'lucide-react';
 import { useStreak } from '../context/StreakContext';
 import { BOOKS } from '../data/books';
@@ -8,9 +8,14 @@ import EpubReader from '../components/EpubReader';
 
 const Reader = () => {
     const { bookId } = useParams();
+    const locationState = useLocation(); // Hook name clash with 'location' state below
     const navigate = useNavigate();
     const { logPageRead, showCelebration, closeCelebration, streak, GOAL, userProgress } = useStreak();
-    const book = BOOKS.find(b => b.id === bookId);
+
+    // Support uploaded books passed via routing state
+    const passedBook = locationState.state?.book;
+    const staticBook = BOOKS.find(b => b.id === bookId);
+    const book = staticBook || passedBook;
 
     const [location, setLocation] = useState(null);
     const [showToast, setShowToast] = useState(null);

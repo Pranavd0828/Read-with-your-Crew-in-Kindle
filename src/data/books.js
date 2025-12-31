@@ -24,21 +24,21 @@ export const BOOKS = [
         id: 'moby',
         title: 'Moby-Dick',
         author: 'Herman Melville',
-        cover: 'https://upload.wikimedia.org/wikipedia/commons/3/36/Moby-Dick_FE_title_page.jpg',
-        file: '/books/gatsby.epub', // Mapped to the Moby Dick file we downloaded
+        cover: '/covers/moby_dick.jpg',
+        file: '/books/gatsby.epub',
     },
     {
         id: 'waste',
         title: 'The Waste Land',
         author: 'T.S. Eliot',
-        cover: 'https://upload.wikimedia.org/wikipedia/en/4/4c/WasteLand1st.jpg',
-        file: '/books/roman.epub', // Mapped to the Waste Land file we downloaded
+        cover: '/covers/waste_land.png',
+        file: '/books/roman.epub',
     },
     {
         id: 'alice',
         title: 'Alice in Wonderland',
         author: 'Lewis Carroll',
-        cover: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Alice_in_Wonderland_cover_1865.jpg',
-        file: '/books/art_of_war.epub', // Mapped to the Childrens Lit file we downloaded
+        cover: '/covers/alice.jpg',
+        file: '/books/art_of_war.epub',
     },
 ];
