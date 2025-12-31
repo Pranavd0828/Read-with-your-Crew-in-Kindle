@@ -44,8 +44,16 @@ const LegacyReader = ({ book, onPageFinish }) => {
         loadMockContent();
     }, [book]);
 
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'ArrowRight') handleNextPage();
+            if (e.key === 'ArrowLeft') handlePrevPage();
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [currentPage, content]); // Re-bind when page changes to ensure latest state
+
     const handleNextPage = () => {
-        // Simple check just to pass up
         const timeSpent = Date.now() - pageStartTime.current;
         if (onPageFinish) {
             onPageFinish(currentPage + 1, timeSpent);
@@ -64,29 +72,71 @@ const LegacyReader = ({ book, onPageFinish }) => {
         }
     };
 
-    if (loading) return <div>Loading Preview...</div>;
+    if (loading) return <div style={{ padding: '20px', textAlign: 'center' }}>Loading Preview...</div>;
 
     return (
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
             <div
                 style={{
                     flex: 1,
                     padding: '24px',
                     fontSize: '18px',
-                    lineHeight: '1.6',
+                    lineHeight: '1.8',
                     fontFamily: 'Georgia, serif',
                     overflowY: 'auto',
-                    whiteSpace: 'pre-wrap'
-                }}
-                onClick={(e) => {
-                    if (e.clientX > window.innerWidth / 2) handleNextPage();
-                    else handlePrevPage();
+                    whiteSpace: 'pre-line', // Better for handling paragraph breaks than pre-wrap
+                    maxWidth: '800px',
+                    margin: '0 auto',
+                    width: '100%'
                 }}
             >
                 {content[currentPage]}
             </div>
 
-            <div style={{ padding: '10px 16px', textAlign: 'center', color: '#999', fontSize: '12px' }}>
+            {/* Fixed Navigation Buttons for Clarity */}
+            <button
+                onClick={handlePrevPage}
+                disabled={currentPage === 0}
+                style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '10px',
+                    transform: 'translateY(-50%)',
+                    background: 'rgba(0,0,0,0.1)',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '40px',
+                    height: '40px',
+                    cursor: currentPage === 0 ? 'not-allowed' : 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    opacity: currentPage === 0 ? 0.3 : 1
+                }}
+            >
+                ←
+            </button>
+
+            <button
+                onClick={handleNextPage}
+                disabled={currentPage === content.length - 1}
+                style={{
+                    position: 'absolute',
+                    top: '50%',
+                    right: '10px',
+                    transform: 'translateY(-50%)',
+                    background: 'rgba(0,0,0,0.1)',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '40px',
+                    height: '40px',
+                    cursor: currentPage === content.length - 1 ? 'not-allowed' : 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    opacity: currentPage === content.length - 1 ? 0.3 : 1
+                }}
+            >
+                →
+            </button>
+
+            <div style={{ padding: '10px 16px', textAlign: 'center', color: '#999', fontSize: '12px', borderTop: '1px solid #eee' }}>
                 Legacy Preview Mode • Page {currentPage + 1} of {content.length}
             </div>
         </div>

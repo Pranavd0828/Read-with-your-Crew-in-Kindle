@@ -31,7 +31,7 @@ export const BOOKS = [
         id: 'waste',
         title: 'The Waste Land',
         author: 'T.S. Eliot',
-        cover: '/covers/waste_land.png',
+        cover: '/covers/waste_land.jpg',
         file: '/books/roman.epub',
     },
     {
