@@ -4,7 +4,7 @@ export const BOOKS = [
         title: 'The Great Gatsby',
         author: 'F. Scott Fitzgerald',
         cover: 'https://upload.wikimedia.org/wikipedia/commons/7/7a/The_Great_Gatsby_Cover_1925_Retouched.jpg',
-        file: '/books/The Great Gatsby - F. Scott Fitzgerald.mobi',
+        file: '/books/alice.epub',
     },
     {
         id: 'roman',

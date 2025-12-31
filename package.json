@@ -12,10 +12,12 @@
   "dependencies": {
     "@lingo-reader/mobi-parser": "^0.4.4",
     "clsx": "^2.1.1",
+    "epubjs": "^0.3.93",
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.562.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-reader": "^2.0.15",
     "react-router-dom": "^7.11.0"
   },
   "devDependencies": {
