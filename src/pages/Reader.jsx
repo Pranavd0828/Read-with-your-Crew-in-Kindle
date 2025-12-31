@@ -5,6 +5,7 @@ import { useStreak } from '../context/StreakContext';
 import { BOOKS } from '../data/books';
 import CelebrationOverlay from '../components/CelebrationOverlay';
 import EpubReader from '../components/EpubReader';
+import LegacyReader from '../components/LegacyReader';
 
 const Reader = () => {
     const { bookId } = useParams();
@@ -129,7 +130,7 @@ const Reader = () => {
 
             {/* Content: EPUB READER */}
             <div style={{ flex: 1, position: 'relative' }}>
-                {book.file.endsWith('.epub') ? (
+                {book.file && book.file.endsWith('.epub') ? (
                     <EpubReader
                         url={book.file}
                         initialLocation={location}
@@ -138,20 +139,10 @@ const Reader = () => {
                         fontSize={fontSize}
                     />
                 ) : (
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        height: '100%',
-                        padding: '40px',
-                        textAlign: 'center',
-                        color: theme === 'dark' ? '#ccc' : '#666'
-                    }}>
-                        <h3 style={{ marginBottom: '16px' }}>Legacy Format</h3>
-                        <p>This book uses an older file format (.mobi) which is not supported by the new Reader Engine.</p>
-                        <p style={{ marginTop: '16px', fontWeight: 'bold' }}>Please try "Moby-Dick" or "Alice in Wonderland" to test the new reading experience.</p>
-                    </div>
+                    <LegacyReader
+                        book={book}
+                        onPageFinish={(newPage, timeSpent) => handlePageChange(newPage, timeSpent)}
+                    />
                 )}
             </div>
 
