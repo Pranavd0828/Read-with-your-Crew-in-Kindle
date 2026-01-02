@@ -17,10 +17,14 @@ const EpubReader = ({ url, onPageChange, initialLocation, theme = 'light', fontS
         const now = Date.now();
 
         // Safety: Ignore everything during the first 4 seconds of loading
-        // This prevents "auto-page-turns" from counting as reading time
         if (now - startupTime.current < 4000) {
             lastPageTurnTime.current = now;
             setLocation(newLoc);
+            return;
+        }
+
+        // Prevent duplicate events for the exact same location (redraws)
+        if (newLoc === location) {
             return;
         }
 
