@@ -5,7 +5,7 @@ const StreakContext = createContext();
 export const useStreak = () => useContext(StreakContext);
 
 export const StreakProvider = ({ children }) => {
-    const [streak, setStreak] = useState(12); // Mock streak
+    const [streak, setStreak] = useState(0); // Mock streak
     const [userProgress, setUserProgress] = useState(0); // Pages read today
 
     // Privacy State
@@ -69,7 +69,7 @@ export const StreakProvider = ({ children }) => {
 
     const resetProgress = () => {
         setUserProgress(0);
-        setStreak(11); // Reset to 11 so it goes to 12 on completion
+        setStreak(0); // Reset to 0
         setShowCelebration(false);
         localStorage.setItem('todayProgress', '0');
     };
