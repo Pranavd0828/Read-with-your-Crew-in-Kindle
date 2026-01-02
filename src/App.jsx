@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { StreakProvider } from './context/StreakContext';
 import Layout from './components/Layout';
 import Library from './pages/Library';
