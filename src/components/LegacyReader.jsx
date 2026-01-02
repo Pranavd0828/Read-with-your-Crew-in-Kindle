@@ -44,10 +44,22 @@ const LegacyReader = ({ book, onPageFinish }) => {
         loadMockContent();
     }, [book]);
 
+    const isNavigating = useRef(false);
+
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.key === 'ArrowRight') handleNextPage();
-            if (e.key === 'ArrowLeft') handlePrevPage();
+            if (isNavigating.current) return;
+
+            if (e.key === 'ArrowRight') {
+                isNavigating.current = true;
+                handleNextPage();
+                setTimeout(() => isNavigating.current = false, 300);
+            }
+            if (e.key === 'ArrowLeft') {
+                isNavigating.current = true;
+                handlePrevPage();
+                setTimeout(() => isNavigating.current = false, 300);
+            }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);

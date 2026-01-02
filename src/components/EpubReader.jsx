@@ -54,12 +54,28 @@ const EpubReader = ({ url, onPageChange, initialLocation, theme = 'light', fontS
         }
     }, [theme, fontSize, url]); // Re-run if these change
 
-    // Keyboard Handler (Stable reference not strictly needed but good practice)
+    // Keyboard Handler with Debounce/Lock
+    const isNavigating = useRef(false);
+
     const handleKeyDown = (e) => {
         const rendition = renditionRef.current;
         if (!rendition) return;
-        if (e.key === 'ArrowRight') rendition.next();
-        if (e.key === 'ArrowLeft') rendition.prev();
+
+        // Debounce / Lock
+        if (isNavigating.current) return;
+
+        if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            e.stopPropagation();
+            isNavigating.current = true;
+            rendition.next().finally(() => setTimeout(() => isNavigating.current = false, 400));
+        }
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            e.stopPropagation();
+            isNavigating.current = true;
+            rendition.prev().finally(() => setTimeout(() => isNavigating.current = false, 400));
+        }
     };
 
     // Attach to window for UI focus
