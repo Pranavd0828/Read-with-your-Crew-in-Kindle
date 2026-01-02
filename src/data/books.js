@@ -15,10 +15,17 @@ export const BOOKS = [
     },
     {
         id: 'zero',
-        title: 'Zero to One',
+        title: 'Zero to One (Preview)',
         author: 'Peter Thiel',
         cover: 'https://images-na.ssl-images-amazon.com/images/I/71uAI28kJuL.jpg',
         file: '/books/art_of_war.epub',
+    },
+    {
+        id: 'moby',
+        title: 'Moby-Dick',
+        author: 'Herman Melville',
+        cover: '/covers/moby_dick.jpg',
+        file: '/books/moby_dick.epub',
     },
     {
         id: 'alice',
