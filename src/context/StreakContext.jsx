@@ -22,8 +22,13 @@ export const StreakProvider = ({ children }) => {
     // Load from local storage or init
     useEffect(() => {
         const savedProgress = localStorage.getItem('todayProgress');
+        const savedStreak = localStorage.getItem('currentStreak');
+
         if (savedProgress) {
             setUserProgress(parseInt(savedProgress, 10));
+        }
+        if (savedStreak) {
+            setStreak(parseInt(savedStreak, 10));
         }
     }, []);
 
@@ -38,7 +43,11 @@ export const StreakProvider = ({ children }) => {
 
             // Check if goal met just now
             if (newVal === GOAL) {
-                setStreak(s => s + 1);
+                setStreak(s => {
+                    const newStreak = s + 1;
+                    localStorage.setItem('currentStreak', newStreak);
+                    return newStreak;
+                });
                 setShowCelebration(true);
             }
 
@@ -72,6 +81,7 @@ export const StreakProvider = ({ children }) => {
         setStreak(0); // Reset to 0
         setShowCelebration(false);
         localStorage.setItem('todayProgress', '0');
+        localStorage.setItem('currentStreak', '0');
     };
 
     // derived state
