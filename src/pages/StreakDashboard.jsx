@@ -130,7 +130,7 @@ const StreakDashboard = () => {
                                 width: '40px',
                                 height: '40px',
                                 borderRadius: '50%',
-                                background: member.id === 1 ? '#000' : '#ddd',
+                                background: '#000',
                                 color: '#fff',
                                 display: 'flex',
                                 alignItems: 'center',

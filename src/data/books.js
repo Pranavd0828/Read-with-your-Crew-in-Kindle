@@ -20,11 +20,5 @@ export const BOOKS = [
         cover: 'https://images-na.ssl-images-amazon.com/images/I/71uAI28kJuL.jpg',
         file: '/books/Zero to One - Peter Thiel.mobi',
     },
-    {
-        id: 'moby',
-        title: 'Moby-Dick',
-        author: 'Herman Melville',
-        cover: '/covers/moby_dick.jpg',
-        file: '/books/moby_dick.epub',
-    },
+
 ];

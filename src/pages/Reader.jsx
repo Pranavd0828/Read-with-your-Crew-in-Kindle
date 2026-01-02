@@ -38,8 +38,8 @@ const Reader = () => {
 
     // Page Turn Logic
     const handlePageChange = (newLocation, timeSpent) => {
-        // Validation: 2 seconds
-        if (timeSpent < 2000) {
+        // Validation: 1 second
+        if (timeSpent < 1000) {
             setShowToast(`Read slightly longer to count! (${(timeSpent / 1000).toFixed(1)}s)`);
             setTimeout(() => setShowToast(null), 2000);
             return;

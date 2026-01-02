@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 
 const StreakContext = createContext();
 
@@ -42,28 +42,23 @@ export const StreakProvider = ({ children }) => {
     const logPageRead = () => {
         const now = Date.now();
         // Prevent double counting (must be at least 1s apart)
-        if (now - lastLogTime.current < 1000) {
-            console.warn("Read logged too quickly, ignoring.");
-            return;
-        }
+        // Prevent double counting (must be at least 1s apart)
+        if (now - lastLogTime.current < 1000) return;
         lastLogTime.current = now;
 
-        setUserProgress((prev) => {
-            const newVal = prev + 1;
-            localStorage.setItem('todayProgress', newVal);
+        const newVal = userProgress + 1;
+        setUserProgress(newVal);
+        localStorage.setItem('todayProgress', newVal);
 
-            // Check if goal met just now
-            if (newVal === GOAL) {
-                setStreak(s => {
-                    const newStreak = s + 1;
-                    localStorage.setItem('currentStreak', newStreak);
-                    return newStreak;
-                });
-                setShowCelebration(true);
-            }
-
-            return newVal;
-        });
+        // Check if goal met just now
+        if (newVal === GOAL) {
+            setStreak(prevStreak => {
+                const newStreak = prevStreak + 1;
+                localStorage.setItem('currentStreak', newStreak.toString());
+                return newStreak;
+            });
+            setShowCelebration(true);
+        }
     };
 
     const closeCelebration = () => setShowCelebration(false);

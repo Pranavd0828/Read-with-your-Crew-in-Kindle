@@ -82,6 +82,8 @@ const LegacyReader = ({ book, onPageFinish }) => {
         }
     };
 
+
+
     if (loading) return <div style={{ padding: '20px', textAlign: 'center' }}>Loading Preview...</div>;
 
     return (
