@@ -4,6 +4,16 @@ import { BOOKS } from '../data/books';
 import { Flame } from 'lucide-react';
 import { useStreak } from '../context/StreakContext';
 
+const resolveAsset = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    const baseUrl = import.meta.env.BASE_URL;
+    // Ensure we don't double slash if base ends with / and path starts with /
+    const safeBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+    const safePath = path.startsWith('/') ? path : `/${path}`;
+    return `${safeBase}${safePath}`;
+};
+
 const Library = () => {
     const { streak } = useStreak();
     const [extraBooks, setExtraBooks] = useState([]);
@@ -28,12 +38,6 @@ const Library = () => {
                                     cover: null, // No cover extraction for now
                                     file: url
                                 };
-                                // Simple way to just pass it to Reader via context or local storage?
-                                // For now, we need to add it to a temporary list.
-                                // We'll just push to a window global or use state if we were staying on this page.
-                                // LIMITATION: React Router state is cleaner.
-                                // Let's try appending to the BOOKS array in memory? No that's immutable usually.
-                                // We will use a simple state for 'extraBooks'
                                 setExtraBooks(prev => [...prev, newBook]);
                             }
                         }} />
@@ -86,7 +90,7 @@ const Library = () => {
                                 boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                             }}>
                                 {book.cover && !book.cover.includes('placeholder') ? (
-                                    <img src={book.cover} alt={book.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <img src={resolveAsset(book.cover)} alt={book.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 ) : (
                                     <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '10px', textAlign: 'center', background: '#e0e0e0', color: '#555' }}>
                                         {book.title}

@@ -7,6 +7,16 @@ import CelebrationOverlay from '../components/CelebrationOverlay';
 import EpubReader from '../components/EpubReader';
 import LegacyReader from '../components/LegacyReader';
 
+const resolveAsset = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    if (path.startsWith('blob:')) return path;
+    const baseUrl = import.meta.env.BASE_URL;
+    const safeBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+    const safePath = path.startsWith('/') ? path : `/${path}`;
+    return `${safeBase}${safePath}`;
+};
+
 const Reader = () => {
     const { bookId } = useParams();
     const locationState = useLocation(); // Hook name clash with 'location' state below
@@ -132,7 +142,7 @@ const Reader = () => {
             <div style={{ flex: 1, position: 'relative' }}>
                 {book.file && book.file.endsWith('.epub') ? (
                     <EpubReader
-                        url={book.file}
+                        url={resolveAsset(book.file)}
                         initialLocation={location}
                         onPageChange={handlePageChange}
                         theme={theme}
