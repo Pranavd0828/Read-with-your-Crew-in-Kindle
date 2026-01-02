@@ -21,24 +21,10 @@ export const BOOKS = [
         file: '/books/art_of_war.epub',
     },
     {
-        id: 'moby',
-        title: 'Moby-Dick',
-        author: 'Herman Melville',
-        cover: '/covers/moby_dick.jpg',
-        file: '/books/gatsby.epub',
-    },
-    {
-        id: 'waste',
-        title: 'The Waste Land',
-        author: 'T.S. Eliot',
-        cover: '/covers/waste_land.jpg',
-        file: '/books/roman.epub',
-    },
-    {
         id: 'alice',
         title: 'Alice in Wonderland',
         author: 'Lewis Carroll',
         cover: '/covers/alice.jpg',
-        file: '/books/art_of_war.epub',
+        file: '/books/alice.epub',
     },
 ];
