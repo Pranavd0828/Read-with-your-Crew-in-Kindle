@@ -50,35 +50,31 @@ const EpubReader = ({ url, onPageChange, initialLocation, theme = 'light', fontS
         }
     }, [theme, fontSize, url]); // Re-run if these change
 
-    // Keyboard Navigation
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            const rendition = renditionRef.current;
-            if (!rendition) return;
-
-            if (e.key === 'ArrowRight') {
-                rendition.next();
-            } else if (e.key === 'ArrowLeft') {
-                rendition.prev();
-            }
-        };
-
-        // Attach to main window (if focus is on UI)
-        window.addEventListener('keydown', handleKeyDown);
-
-        // Attach to EPUB iframe (if focus is on book text)
+    // Keyboard Handler (Stable reference not strictly needed but good practice)
+    const handleKeyDown = (e) => {
         const rendition = renditionRef.current;
-        if (rendition) {
-            rendition.on('keydown', handleKeyDown);
-        }
+        if (!rendition) return;
+        if (e.key === 'ArrowRight') rendition.next();
+        if (e.key === 'ArrowLeft') rendition.prev();
+    };
 
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-            if (rendition) {
-                rendition.off('keydown', handleKeyDown);
-            }
-        };
-    }, [url]); // Re-attach if url (and thus rendition) potentially changes logic
+    // Attach to window for UI focus
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
+    // Helper to attach to iframe once available
+    const setRendition = (rendition) => {
+        renditionRef.current = rendition;
+
+        // Initial setup
+        rendition.themes.fontSize(`${fontSize}%`);
+        rendition.themes.select(theme);
+
+        // ATTACH LISTENER DIRECTLY HERE
+        rendition.on('keydown', handleKeyDown);
+    };
 
     return (
         <div style={{ height: '100%', position: 'relative' }}>
@@ -86,12 +82,7 @@ const EpubReader = ({ url, onPageChange, initialLocation, theme = 'light', fontS
                 url={url}
                 location={location}
                 locationChanged={handleLocationChanged}
-                getRendition={(rendition) => {
-                    renditionRef.current = rendition;
-                    // Initial setup
-                    rendition.themes.fontSize(`${fontSize}%`);
-                    rendition.themes.select(theme);
-                }}
+                getRendition={setRendition}
                 title="" // Hide default title bar if we want our own
                 epubOptions={{
                     flow: 'paginated',
