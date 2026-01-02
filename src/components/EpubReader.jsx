@@ -11,19 +11,23 @@ const EpubReader = ({ url, onPageChange, initialLocation, theme = 'light', fontS
     // OR we track time and just warn user if they are speeding.
 
     const isFirstLocation = useRef(true);
+    const startupTime = useRef(Date.now());
 
     const handleLocationChanged = (newLoc) => {
         const now = Date.now();
+
+        // Safety: Ignore everything during the first 4 seconds of loading
+        // This prevents "auto-page-turns" from counting as reading time
+        if (now - startupTime.current < 4000) {
+            lastPageTurnTime.current = now;
+            setLocation(newLoc);
+            return;
+        }
+
         const timeSpent = now - lastPageTurnTime.current;
         lastPageTurnTime.current = now;
 
         setLocation(newLoc);
-
-        // Ignore the very first "change" which is just the book loading
-        if (isFirstLocation.current) {
-            isFirstLocation.current = false;
-            return;
-        }
 
         if (onPageChange) {
             onPageChange(newLoc, timeSpent);
