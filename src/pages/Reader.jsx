@@ -53,7 +53,7 @@ const Reader = () => {
     if (!book) return <div>Book not found</div>;
 
     return (
-        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: theme === 'dark' ? '#1a1a1a' : '#F8F9FA', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', background: theme === 'dark' ? '#1a1a1a' : '#F8F9FA', position: 'relative', overflow: 'hidden' }}>
             {showCelebration && <CelebrationOverlay streak={streak} onClose={closeCelebration} />}
 
             {showToast && (

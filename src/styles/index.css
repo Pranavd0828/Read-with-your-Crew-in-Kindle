@@ -48,7 +48,8 @@ button {
 .screen-content {
   flex: 1;
   padding: 20px;
-  padding-bottom: 80px; /* space for bottom nav */
+  padding-bottom: 80px;
+  /* space for bottom nav */
 }
 
 /* Bottom Nav */
@@ -62,6 +63,7 @@ button {
   display: flex;
   justify-content: space-around;
   padding: 12px 0;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
   z-index: 100;
   max-width: 600px;
   margin: 0 auto;
