@@ -27,11 +27,4 @@ export const BOOKS = [
         cover: '/covers/moby_dick.jpg',
         file: '/books/moby_dick.epub',
     },
-    {
-        id: 'alice',
-        title: 'Alice in Wonderland',
-        author: 'Lewis Carroll',
-        cover: '/covers/alice.jpg',
-        file: '/books/alice.epub',
-    },
 ];

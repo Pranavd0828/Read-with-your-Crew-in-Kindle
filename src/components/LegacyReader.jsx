@@ -27,9 +27,9 @@ const LegacyReader = ({ book, onPageFinish }) => {
                 specificText = "Preview content not available for this legacy format. Please use the EPUB version for the full experience.";
             }
 
-            // Replicate text to simulate length
+            // Replicate text to simulate length - Increased to 100x for longer "books"
             let fullMock = `\n\n${book.title.toUpperCase()}\n\nCHAPTER ONE\n\n${specificText}\n\n`;
-            for (let k = 0; k < 10; k++) {
+            for (let k = 0; k < 100; k++) {
                 fullMock += specificText + "\n\n";
             }
 
@@ -48,39 +48,37 @@ const LegacyReader = ({ book, onPageFinish }) => {
 
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (isNavigating.current) return;
-
-            if (e.key === 'ArrowRight') {
-                isNavigating.current = true;
-                handleNextPage();
-                setTimeout(() => isNavigating.current = false, 300);
-            }
-            if (e.key === 'ArrowLeft') {
-                isNavigating.current = true;
-                handlePrevPage();
-                setTimeout(() => isNavigating.current = false, 300);
-            }
+            if (e.key === 'ArrowRight') handleNextPage();
+            if (e.key === 'ArrowLeft') handlePrevPage();
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [currentPage, content]); // Re-bind when page changes to ensure latest state
+    }, [currentPage, content]);
 
     const handleNextPage = () => {
+        if (isNavigating.current) return;
+
         const timeSpent = Date.now() - pageStartTime.current;
         if (onPageFinish) {
             onPageFinish(currentPage + 1, timeSpent);
         }
 
         if (currentPage < content.length - 1) {
+            isNavigating.current = true;
             setCurrentPage(prev => prev + 1);
             window.scrollTo(0, 0);
+            setTimeout(() => isNavigating.current = false, 400);
         }
     };
 
     const handlePrevPage = () => {
+        if (isNavigating.current) return;
+
         if (currentPage > 0) {
+            isNavigating.current = true;
             setCurrentPage(curr => curr - 1);
             window.scrollTo(0, 0);
+            setTimeout(() => isNavigating.current = false, 400);
         }
     };
 

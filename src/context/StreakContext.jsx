@@ -35,8 +35,19 @@ export const StreakProvider = ({ children }) => {
     // Update logic when page is turned
     const [showCelebration, setShowCelebration] = useState(false);
 
+    // Global Cooldown for Page logging
+    const lastLogTime = useRef(0);
+
     // Update logic when page is turned
     const logPageRead = () => {
+        const now = Date.now();
+        // Prevent double counting (must be at least 1s apart)
+        if (now - lastLogTime.current < 1000) {
+            console.warn("Read logged too quickly, ignoring.");
+            return;
+        }
+        lastLogTime.current = now;
+
         setUserProgress((prev) => {
             const newVal = prev + 1;
             localStorage.setItem('todayProgress', newVal);
