@@ -10,16 +10,20 @@ const EpubReader = ({ url, onPageChange, initialLocation, theme = 'light', fontS
     // react-reader's locationChanged doesn't block, so we might need to handle "next" button manually
     // OR we track time and just warn user if they are speeding.
 
-    const handleLocationChanged = (newLoc) => {
-        // Simple logic: If time since last significant change < 2s, show warning?
-        // But react-reader doesn't give us a "preventDefault" on navigation easily without custom controls.
-        // For prototype, we will just LOG the time spent and emit events.
+    const isFirstLocation = useRef(true);
 
+    const handleLocationChanged = (newLoc) => {
         const now = Date.now();
         const timeSpent = now - lastPageTurnTime.current;
         lastPageTurnTime.current = now;
 
         setLocation(newLoc);
+
+        // Ignore the very first "change" which is just the book loading
+        if (isFirstLocation.current) {
+            isFirstLocation.current = false;
+            return;
+        }
 
         if (onPageChange) {
             onPageChange(newLoc, timeSpent);
