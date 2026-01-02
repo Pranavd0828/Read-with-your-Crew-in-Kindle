@@ -63,9 +63,22 @@ const EpubReader = ({ url, onPageChange, initialLocation, theme = 'light', fontS
             }
         };
 
+        // Attach to main window (if focus is on UI)
         window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, []);
+
+        // Attach to EPUB iframe (if focus is on book text)
+        const rendition = renditionRef.current;
+        if (rendition) {
+            rendition.on('keydown', handleKeyDown);
+        }
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            if (rendition) {
+                rendition.off('keydown', handleKeyDown);
+            }
+        };
+    }, [url]); // Re-attach if url (and thus rendition) potentially changes logic
 
     return (
         <div style={{ height: '100%', position: 'relative' }}>
