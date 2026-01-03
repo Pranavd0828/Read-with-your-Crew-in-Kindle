@@ -8,6 +8,8 @@ import StreakDashboard from './pages/StreakDashboard';
 import './styles/index.css';
 
 function App() {
+  // Architecture: StreakProvider wraps the router to ensure global state access
+  // across all pages (Library, Reader, Dashboard).
   return (
     <StreakProvider>
       <Router>
