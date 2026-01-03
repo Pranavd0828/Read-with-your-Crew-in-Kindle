@@ -3,6 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "A social reading app for Kindle-like experience with streak tracking.",
+  "keywords": [
+    "react",
+    "reading",
+    "social",
+    "kindle",
+    "streak"
+  ],
   "homepage": "https://Pranavd0828.github.io/Read-with-your-Crew-in-Kindle",
   "scripts": {
     "dev": "vite",
