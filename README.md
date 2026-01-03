@@ -1,4 +1,10 @@
-# Read with your Crew in Kindle
+# Read with your Crew
+
+## Latest Features
+- **Legacy Mode**: Full support for classic `.mobi` files with simulated page turning.
+- **Streak Protection**: Smart global debounce to prevent accidental double-counting.
+- **Uniform UI**: High-contrast, standardized avatar design for the Crew Dashboard.
+ in Kindle
 
 This project is a social reading prototype that brings the power of accountability to your e-reader. It allows friends to track their daily reading habits together and maintain a shared streak.
 
