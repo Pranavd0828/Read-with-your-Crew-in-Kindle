@@ -56,8 +56,11 @@ export const StreakProvider = ({ children }) => {
 
         // Check if goal met just now
         if (newVal === GOAL) {
+            console.log("Goal met! Updating streak from:", streak);
             setStreak(prevStreak => {
-                const newStreak = prevStreak + 1;
+                const numericStreak = Number(prevStreak);
+                const newStreak = numericStreak + 1;
+                console.log("New Streak:", newStreak);
                 localStorage.setItem('currentStreak', newStreak.toString());
                 return newStreak;
             });
