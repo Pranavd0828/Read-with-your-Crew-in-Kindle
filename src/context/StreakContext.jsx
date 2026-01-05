@@ -88,10 +88,10 @@ export const StreakProvider = ({ children }) => {
 
     const resetProgress = () => {
         setUserProgress(0);
-        setStreak(0); // Reset to 0
+        setStreak(1); // Set to 1 for Demo (so we go 1 -> 2)
         setShowCelebration(false);
         localStorage.setItem('todayProgress', '0');
-        localStorage.setItem('currentStreak', '0');
+        localStorage.setItem('currentStreak', '1');
     };
 
     // derived state

@@ -222,7 +222,7 @@ const StreakDashboard = () => {
                 <button
                     onClick={() => {
                         resetProgress();
-                        alert("Progress reset to 0. Streak set to 11. Go read 3 pages!");
+                        alert("Progress reset. Streak set to 1. Go read 3 pages to hit 2!");
                     }}
                     style={{ background: 'none', border: '1px dashed #999', padding: '8px 16px', borderRadius: '8px', color: '#666', fontSize: '12px', cursor: 'pointer' }}
                 >
