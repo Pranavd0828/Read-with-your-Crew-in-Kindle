@@ -38,7 +38,11 @@ export const StreakProvider = ({ children }) => {
     // Global Cooldown for Page logging
     const lastLogTime = useRef(0);
 
-    // Update logic when page is turned
+    /**
+     * Logs a page read event.
+     * Enforces a 1s cooldown to prevent double-counting.
+     * Updates daily progress and increments streak if goal is met.
+     */
     const logPageRead = () => {
         const now = Date.now();
         // Prevent double counting (must be at least 1s apart)
