@@ -164,6 +164,7 @@ const StreakDashboard = () => {
                                     {member.name !== 'You' && (
                                         <button
                                             onClick={() => handleNudge(member.name)}
+                                            aria-label={`Nudge ${member.name}`}
                                             style={{
                                                 background: '#f0f0f0',
                                                 border: '1px solid #ddd',
