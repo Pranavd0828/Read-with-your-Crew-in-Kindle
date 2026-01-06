@@ -19,12 +19,12 @@ const resolveAsset = (path) => {
 
 const Reader = () => {
     const { bookId } = useParams();
-    const locationState = useLocation(); // Hook name clash with 'location' state below
+    const routeLocation = useLocation(); // Renamed to avoid clash with 'location' state
     const navigate = useNavigate();
     const { logPageRead, showCelebration, closeCelebration, streak, GOAL, userProgress } = useStreak();
 
     // Support uploaded books passed via routing state
-    const passedBook = locationState.state?.book;
+    const passedBook = routeLocation.state?.book;
     const staticBook = BOOKS.find(b => b.id === bookId);
     const book = staticBook || passedBook;
 
