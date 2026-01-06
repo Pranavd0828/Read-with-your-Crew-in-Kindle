@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 
+/**
+ * LegacyReader Component
+ * Simulates a .mobi reader experience by looping text content.
+ * Used for the 3 original demo books (Gatsby, Roman, Zero to One).
+ * 
+ * @param {Object} book - The book object containing title and file info.
+ * @param {Function} onPageFinish - Callback when a page is turned, passing timeSpent.
+ */
 const LegacyReader = ({ book, onPageFinish }) => {
     const [content, setContent] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
