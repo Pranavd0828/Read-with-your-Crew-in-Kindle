@@ -104,6 +104,14 @@ const Library = () => {
                 ))}
             </div>
         </div>
+        <style>{`
+            .book-card {
+                transition: transform 0.2s ease;
+            }
+            .book-card:hover {
+                transform: translateY(-4px);
+            }
+        `}</style>
     );
 };
 
