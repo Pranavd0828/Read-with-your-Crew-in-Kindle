@@ -68,9 +68,7 @@ const CelebrationOverlay = ({ streak, onClose }) => {
                 {/* We can add simple CSS particles here if needed, keeping it clean for now */}
             </div>
 
-            <div style={{
-                transform: `scale(${scale})`,
-                transition: 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+            <div className="animate-pop-in" style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center'
