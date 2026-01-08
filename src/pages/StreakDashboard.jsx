@@ -107,7 +107,7 @@ const StreakDashboard = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     border: '2px solid rgba(255, 152, 0, 0.5)'
-                }}>
+                }} className="flame-pulse">
                     <Flame size={40} fill="#FF9800" stroke="#FF9800" />
                 </div>
             </div>

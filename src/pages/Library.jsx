@@ -103,9 +103,7 @@ const Library = () => {
                     </Link>
                 ))}
             </div>
-                ))}
         </div>
-        </div >
     );
 };
 
