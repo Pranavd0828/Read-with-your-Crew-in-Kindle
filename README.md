@@ -4,6 +4,7 @@
 - **Legacy Mode**: Full support for classic `.mobi` files with simulated page turning.
 - **Streak Protection**: Smart global debounce to prevent accidental double-counting.
 - **Uniform UI**: High-contrast, standardized avatar design for the Crew Dashboard.
+- **UI Polish**: Added Glassmorphism navigation and tactile button interactions.
  in Kindle
 
 This project is a social reading prototype that brings the power of accountability to your e-reader. It allows friends to track their daily reading habits together and maintain a shared streak.
