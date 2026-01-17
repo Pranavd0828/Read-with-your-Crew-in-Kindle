@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 
+import { INITIAL_GROUP_MEMBERS } from '../data/constants';
+
 const StreakContext = createContext();
 
 export const useStreak = () => useContext(StreakContext);
@@ -11,11 +13,7 @@ export const StreakProvider = ({ children }) => {
     // Privacy State
     const [isPrivate, setIsPrivate] = useState(false);
 
-    const [groupMembers, setGroupMembers] = useState([
-        { id: 1, name: 'You', pagesRead: 0, status: 'pending', currentBook: 'The Great Gatsby', isPrivate: false },
-        { id: 2, name: 'Alice', pagesRead: 3, status: 'done', currentBook: 'Atomic Habits', isPrivate: true },
-        { id: 3, name: 'Bob', pagesRead: 1, status: 'in_progress', currentBook: 'Sapiens', isPrivate: false },
-    ]);
+    const [groupMembers, setGroupMembers] = useState(INITIAL_GROUP_MEMBERS);
 
     const GOAL = 3;
 
