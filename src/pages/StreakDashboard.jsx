@@ -19,10 +19,30 @@ const StreakDashboard = () => {
     const [inviteName, setInviteName] = useState("");
     const [inviteEmail, setInviteEmail] = useState("");
     const [emailError, setEmailError] = useState("");
+    
+    // Cooldown State: { "Name": timestamp_expiry }
+    const [cooldowns, setCooldowns] = useState({});
 
     const handleNudge = (name) => {
+        // Double check just in case
+        if (cooldowns[name] && Date.now() < cooldowns[name]) return;
+
         const randomMsg = NUDGES[Math.floor(Math.random() * NUDGES.length)];
         setNudgeMessage(`Nudged ${name}: "${randomMsg}"`);
+        
+        // set 60s cooldown
+        const expiry = Date.now() + 60000;
+        setCooldowns(prev => ({ ...prev, [name]: expiry }));
+        
+        // Auto-clear logic isn't strictly needed if we check timestamp on render, 
+        // but let's force a re-render after 60s to re-enable button
+        setTimeout(() => {
+            setCooldowns(prev => {
+                const copy = { ...prev };
+                delete copy[name];
+                return copy;
+            });
+        }, 60000);
     };
 
     const handleInvite = (e) => {
@@ -115,87 +135,102 @@ const StreakDashboard = () => {
             <h2 style={{ fontSize: '18px', marginBottom: '16px', fontWeight: '600' }}>Today's Progress</h2>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {groupMembers.map(member => (
-                    <div key={member.id} style={{
-                        background: '#fff',
-                        padding: '16px',
-                        borderRadius: '8px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        border: '1px solid #eee'
-                    }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <div style={{
-                                width: '40px',
-                                height: '40px',
-                                borderRadius: '50%',
-                                background: '#000',
-                                color: '#fff',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontWeight: 'bold',
-                                fontSize: '14px'
-                            }}>
-                                {member.name.charAt(0)}
-                            </div>
-                            <div>
-                                <div style={{ fontWeight: '600' }}>{member.name}</div>
-                                <div style={{ fontSize: '12px', color: '#666' }}>
-                                    {member.isPrivate ?
-                                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontStyle: 'italic' }}>
-                                            <Lock size={10} /> Private Reading
-                                        </span>
-                                        : member.currentBook
-                                    }
+                {groupMembers.map(member => {
+                    const isOnCooldown = cooldowns[member.name] && Date.now() < cooldowns[member.name];
+                    return (
+                        <div key={member.id} style={{
+                            background: '#fff',
+                            padding: '16px',
+                            borderRadius: '8px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            border: '1px solid #eee'
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <div style={{
+                                    width: '40px',
+                                    height: '40px',
+                                    borderRadius: '50%',
+                                    background: '#000',
+                                    color: '#fff',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontWeight: 'bold',
+                                    fontSize: '14px'
+                                }}>
+                                    {member.name.charAt(0)}
                                 </div>
-                                <div style={{ fontSize: '12px', color: '#666' }}>
-                                    {Math.min(member.pagesRead, GOAL)} / {GOAL} pages
+                                <div>
+                                    <div style={{ fontWeight: '600' }}>{member.name}</div>
+                                    <div style={{ fontSize: '12px', color: '#666' }}>
+                                        {member.isPrivate ?
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontStyle: 'italic' }}>
+                                                <Lock size={10} /> Private Reading
+                                            </span>
+                                            : member.currentBook
+                                        }
+                                    </div>
+                                    <div style={{ fontSize: '12px', color: '#666' }}>
+                                        {Math.min(member.pagesRead, GOAL)} / {GOAL} pages
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div>
-                            {member.status === 'done' ? (
-                                <CheckCircle color="#4CAF50" fill="#E8F5E9" size={24} />
-                            ) : (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    {member.name !== 'You' && (
-                                        <button
-                                            onClick={() => handleNudge(member.name)}
-                                            aria-label={`Nudge ${member.name}`}
-                                            style={{
-                                                background: '#f0f0f0',
-                                                border: '1px solid #ddd',
-                                                borderRadius: '20px',
-                                                padding: '4px 12px',
-                                                fontSize: '12px',
-                                                fontWeight: '600',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '4px'
-                                            }}
-                                        >
-                                            <Bell size={12} /> Nudge
-                                        </button>
-                                    )}
-                                    {member.status === 'in_progress' ? (
-                                        <div style={{
-                                            width: '24px', height: '24px',
-                                            borderRadius: '50%',
-                                            border: '3px solid #FF9800',
-                                            borderTopColor: 'transparent',
-                                            transform: 'rotate(45deg)'
-                                        }} />
-                                    ) : (
-                                        <Circle color="#ddd" size={24} />
-                                    )}
-                                </div>
-                            )}
+                            <div>
+                                {member.status === 'done' ? (
+                                    <CheckCircle color="#4CAF50" fill="#E8F5E9" size={24} />
+                                ) : (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        {member.name !== 'You' && (
+                                            <button
+                                                onClick={() => handleNudge(member.name)}
+                                                disabled={isOnCooldown}
+                                                aria-label={`Nudge ${member.name}`}
+                                                style={{
+                                                    background: isOnCooldown ? '#f5f5f5' : '#f0f0f0',
+                                                    color: isOnCooldown ? '#999' : '#333',
+                                                    border: '1px solid #ddd',
+                                                    borderRadius: '20px',
+                                                    padding: '4px 12px',
+                                                    fontSize: '12px',
+                                                    fontWeight: '600',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '4px',
+                                                    cursor: isOnCooldown ? 'not-allowed' : 'pointer',
+                                                    transition: 'all 0.2s ease'
+                                                }}
+                                            >
+                                                {isOnCooldown ? (
+                                                    <>
+                                                        <CheckCircle size={12} /> Sent
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Bell size={12} /> Nudge
+                                                    </>
+                                                )}
+                                            </button>
+                                        )}
+                                        {member.status === 'in_progress' ? (
+                                            <div style={{
+                                                width: '24px', height: '24px',
+                                                borderRadius: '50%',
+                                                border: '3px solid #FF9800',
+                                                borderTopColor: 'transparent',
+                                                transform: 'rotate(45deg)'
+                                            }} />
+                                        ) : (
+                                            <Circle color="#ddd" size={24} />
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             <div style={{ marginTop: '24px', textAlign: 'center' }}>
