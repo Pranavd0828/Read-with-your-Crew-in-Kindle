@@ -21,12 +21,18 @@ const Reader = () => {
     const { bookId } = useParams();
     const routeLocation = useLocation(); // Renamed to avoid clash with 'location' state
     const navigate = useNavigate();
-    const { logPageRead, showCelebration, closeCelebration, streak, GOAL, userProgress } = useStreak();
+    const { logPageRead, showCelebration, closeCelebration, streak, GOAL, userProgress, setCurrentBookId } = useStreak();
 
     // Support uploaded books passed via routing state
     const passedBook = routeLocation.state?.book;
     const staticBook = BOOKS.find(b => b.id === bookId);
     const book = staticBook || passedBook;
+
+    useEffect(() => {
+        if (bookId) {
+            setCurrentBookId(bookId);
+        }
+    }, [bookId]);
 
     const [location, setLocation] = useState(null);
     const [showToast, setShowToast] = useState(null);

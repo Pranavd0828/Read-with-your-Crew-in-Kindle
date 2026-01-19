@@ -21,6 +21,7 @@ export const StreakProvider = ({ children }) => {
     useEffect(() => {
         const savedProgress = localStorage.getItem('todayProgress');
         const savedStreak = localStorage.getItem('currentStreak');
+        const savedBook = localStorage.getItem('lastReadBookId');
 
         if (savedProgress) {
             setUserProgress(parseInt(savedProgress, 10));
@@ -28,7 +29,17 @@ export const StreakProvider = ({ children }) => {
         if (savedStreak) {
             setStreak(parseInt(savedStreak, 10));
         }
+        if (savedBook) {
+            setCurrentBookId(savedBook);
+        }
     }, []);
+
+    const [currentBookId, setCurrentBookIdState] = useState(null);
+
+    const setCurrentBookId = (id) => {
+        setCurrentBookIdState(id);
+        localStorage.setItem('lastReadBookId', id);
+    };
 
     // Update logic when page is turned
     const [showCelebration, setShowCelebration] = useState(false);
@@ -126,7 +137,9 @@ export const StreakProvider = ({ children }) => {
             inviteFriend,
             showCelebration,
             closeCelebration,
-            resetProgress
+            resetProgress,
+            currentBookId,
+            setCurrentBookId
         }}>
             {children}
         </StreakContext.Provider>
