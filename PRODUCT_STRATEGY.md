@@ -15,11 +15,15 @@ The streak is the most powerful psychological hook for habit formation. It creat
 Digital reading is mature, but social reading is stagnant. People share book recommendations on TikTok or Goodreads, but the act of reading remains isolated. At the same time, users are craving more meaningful digital connections that go beyond passive scrolling. A platform that unites friends around intellectual growth and shared stories fits perfectly into this cultural moment.
 
 ## How It Works
-We are building a lightweight web prototype that mimics the familiar Kindle interface to reduce friction.
-1.  **The Library**: Users see their current books in a clean and distraction-free grid. The library supports both curated classics and personal file uploads.
-2.  **The Reader**: An advanced e-reader experience allows users to read real EPUB books with custom themes. It verifies engagement by measuring time spent on each page.
-3.  **The Crew**: A dashboard shows who has read today and who needs a nudge. Privacy controls allow users to keep their book titles hidden while still sharing their progress.
-4.  **The Celebration**: Completing the daily goal triggers a rewarding visual celebration to reinforce the habit loop.
+We are building a lightweight web prototype that mimics the familiar Kindle interface but optimizes it for action:
+1.  **The Home Screen**: Instead of a static library, users see a **Daily Progress Ring** and a "Continue Reading" button that launches their last book instantly. A time-aware greeting ("Good Morning") adds a personal touch.
+2.  **The Momentum Bar**: Inside the reader, a progress bar fills up as you read. Meeting the daily goal triggers a **Gold Pulse** animation, providing immediate positive reinforcement without interrupting the flow.
+3.  **The Crew**: A dashboard shows who has read today. A "Nudge" feature allows friends to send reminders, protected by a 60-second cooldown to prevent spam.
+4.  **The Validation**: To ensuring the streak means something, the system validates that you spend real time (minimum 1 second) on each page.
 
 ## How We Built It
-We built this application using React and Vite to ensure a fast and responsive user experience. The core reading engine processes standard EPUB files directly in the browser, allowing for high-fidelity text rendering. To track habits accurately, we implemented a smart validation system that measures the time spent on each page, ensuring users are actually reading rather than just clicking through. Finally, we store all streak data locally on the user's device, which allows for persistent tracking without the need for a complex server infrastructure.
+We used **React** and **Vite** for a fast, app-like experience.
+- **State Management**: We use React Context to track the `lastReadBookId`, `dailyProgress`, and `streak` across the app.
+- **Persistence**: All data is saved to `localStorage`, allowing the app to "remember" where you left off without a database.
+- **Animations**: CSS transitions power the Momentum Bar and the Gold Pulse, using hardware acceleration for smoothness.
+- **Logic**: Custom hooks handle the time validation (1s rule) and the Nudge cooldown timers.
