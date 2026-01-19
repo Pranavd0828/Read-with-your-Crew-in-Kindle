@@ -27,6 +27,13 @@ const Library = () => {
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (progressPercent / 100) * circumference;
 
+    const getGreeting = () => {
+        const hour = new Date().getHours();
+        if (hour < 12) return 'Good Morning';
+        if (hour < 18) return 'Good Afternoon';
+        return 'Good Evening';
+    };
+
     return (
         <div style={{ paddingBottom: '80px', background: '#f8f9fa', minHeight: '100vh' }}>
 
@@ -41,7 +48,7 @@ const Library = () => {
             }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
                     <div>
-                        <h1 style={{ fontSize: '28px', fontWeight: '800', margin: 0, lineHeight: 1.2 }}>Good Evening, <br /> Reader</h1>
+                        <h1 style={{ fontSize: '28px', fontWeight: '800', margin: 0, lineHeight: 1.2 }}>{getGreeting()}, <br /> Reader</h1>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '8px' }}>
                             <Flame size={18} fill="#FF4500" stroke="#FF4500" />
                             <span style={{ fontSize: '14px', fontWeight: '600', color: '#333' }}>{streak} Day Streak</span>

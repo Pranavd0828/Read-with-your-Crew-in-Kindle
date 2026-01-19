@@ -79,6 +79,26 @@ const Reader = () => {
                 </div>
             )}
 
+            {/* MOMENTUM BAR */}
+            <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '6px',
+                zIndex: 9999,
+                background: '#eee' // Background of bar
+            }}>
+                <div style={{
+                    width: `${Math.min(100, (userProgress / GOAL) * 100)}%`,
+                    height: '100%',
+                    background: userProgress >= GOAL ? '#FFD700' : '#FF4500', // Gold if done, Orange if progress
+                    transition: 'width 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                    boxShadow: userProgress >= GOAL ? '0 0 10px #FFD700' : 'none',
+                    animation: userProgress >= GOAL ? 'pulse-gold 2s infinite' : 'none'
+                }} />
+            </div>
+
             {/* Top Bar */}
             <div style={{
                 display: 'flex',
@@ -178,6 +198,14 @@ const Reader = () => {
                     Daily Goal: {Math.min(userProgress, GOAL)} / {GOAL} {userProgress >= GOAL ? '(Done!)' : ''}
                 </span>
             </div>
+            {/* Reading bar animation */}
+            <style>{`
+                @keyframes pulse-gold {
+                    0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+                    70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+                    100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+                }
+            `}</style>
         </div>
     );
 };
